@@ -40,8 +40,18 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // POST - /api/video-games - create a new video game
+// Define the route handler for PATCH /api/video-games
+// Call the function to create a new video game using the request body
+// Send the newly created video game as a response
+// Handle errors by passing them to the next middleware
 router.patch("/", async (req, res, next) => {
-  // LOGIC GOES HERE
+  try {
+    const videoGame = await createVideoGame(req.body);
+
+    res.send(videoGame);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // PUT - /api/video-games/:id - update a single video game by id

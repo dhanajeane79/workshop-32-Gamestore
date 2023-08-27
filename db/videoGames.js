@@ -27,20 +27,48 @@ async function getAllVideoGames() {
 // Return the retrieved video game
 // If an error occurs, throw the error to be handled by the caller
 async function getVideoGameById(id) {
-    try {
-        const { rows: [videoGame] } = await client.query(`
+  try {
+    const {
+      rows: [videoGame],
+    } = await client.query(
+      `
             SELECT * FROM videoGames
             WHERE id = $1;
-        `, [id]);
-        return videoGame;
-    } catch (error) {
-        throw error;
-    }
+        `,
+      [id]
+    );
+    return videoGame;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // POST - /api/video-games - create a new video game
+// Define the function to create a new video game
+// Destructure the properties from the request body
+// Execute the SQL query to insert a new video game into the database
+// Extract the first element of the "rows" array (newly created video game) from the query result
+// Return the newly created video game
+// If an error occurs, throw the error to be handled by the caller
 async function createVideoGame(body) {
-  // LOGIC GOES HERE
+  const { name, description, price, inStock, isPopular, imgUrl } = body;
+
+  try {
+    const {
+      rows: [videoGame],
+    } = await client.query(
+      `
+            INSERT INTO videogames(name, description, price, "inStock", "isPopular", "imgUrl")
+            VALUES($1, $2, $3, $4, $5, $6)
+            RETURNING *;
+        `,
+      [name, description, price, inStock, isPopular, imgUrl]
+    );
+
+    return videoGame;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // PUT - /api/video-games/:id - update a single video game by id
