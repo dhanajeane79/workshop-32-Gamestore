@@ -55,8 +55,18 @@ router.patch("/", async (req, res, next) => {
 });
 
 // PUT - /api/video-games/:id - update a single video game by id
+// Define the route handler for PUT /api/video-games/:id
+// Call the function to update the video game using the provided ID and request body
+// Send the updated video game as a response
+// Handle errors by passing them to the next middleware
 router.put("/:id", async (req, res, next) => {
-  // LOGIC GOES HERE
+  try {
+    const videoGame = await updateVideoGame(req.params.id, req.body);
+
+    res.send(videoGame);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // DELETE - /api/video-games/:id - delete a single video game by id

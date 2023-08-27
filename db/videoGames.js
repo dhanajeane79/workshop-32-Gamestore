@@ -72,8 +72,33 @@ async function createVideoGame(body) {
 }
 
 // PUT - /api/video-games/:id - update a single video game by id
+// Define the function to update a video game 
+
 async function updateVideoGame(id, fields = {}) {
-  // LOGIC GOES HERE
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
+  if (setString.length === 0) {
+    return;
+  }  
+
+  try {
+    const {
+      rows: [videoGame],
+    } = await client.query(
+      `
+            UPDATE videogames
+            SET ${setString}
+            WHERE id=${id}
+            RETURNING *;
+        `,
+      Object.values(fields)
+    );
+
+    return videoGame;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // DELETE - /api/video-games/:id - delete a single video game by id
