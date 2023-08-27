@@ -70,8 +70,18 @@ router.put("/:id", async (req, res, next) => {
 });
 
 // DELETE - /api/video-games/:id - delete a single video game by id
+// Define the route handler for DELETE/api/video-games/:id
+// Call the deleteVideoGame function to delete the video game
+// Send the deleted video game as the response
+// Pass the error to the error-handling middleware
 router.delete("/:id", async (req, res, next) => {
-  // LOGIC GOES HERE
+  try {
+    const videoGame = await deleteVideoGame(req.params.id);
+
+    res.send(videoGame);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

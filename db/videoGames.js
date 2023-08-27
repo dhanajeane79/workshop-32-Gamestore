@@ -72,15 +72,18 @@ async function createVideoGame(body) {
 }
 
 // PUT - /api/video-games/:id - update a single video game by id
-// Define the function to update a video game 
-
+// Define the function to update a video game
+// Generate the SET string for the UPDATE query using the provided fields
+// Execute the UPDATE query to update the video game
+// Return the updated video game
+// Throw an error if an error occurs during the update
 async function updateVideoGame(id, fields = {}) {
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
   if (setString.length === 0) {
     return;
-  }  
+  }
 
   try {
     const {
@@ -102,8 +105,27 @@ async function updateVideoGame(id, fields = {}) {
 }
 
 // DELETE - /api/video-games/:id - delete a single video game by id
+// Define the function to delete a video game
+// Execute the DELETE query to delete the video game
+// Return the deleted video game
+// Throw an error if an error occurs during the deletion
 async function deleteVideoGame(id) {
-  // LOGIC GOES HERE
+  try {
+    const {
+      rows: [videoGame],
+    } = await client.query(
+      `
+            DELETE FROM videogames
+            WHERE id=$1
+            RETURNING *;
+        `,
+      [id]
+    );
+
+    return videoGame;
+  } catch (error) {
+    throw error;
+  }
 }
 
 module.exports = {
