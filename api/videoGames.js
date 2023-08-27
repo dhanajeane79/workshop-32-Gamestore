@@ -25,9 +25,14 @@ router.get("/", async (req, res, next) => {
 });
 
 // GET - /api/video-games/:id - get a single video game by id
+// Define the route handler for GET /api/video-games/:id
+// Call the function to retrieve a video game by its ID
+// Send the retrieved video game as a response
+// Handle errors by passing them to the next middleware
 router.get("/:id", async (req, res, next) => {
   try {
-    const videoGame = await getVideoGameById(REPLACE_ME);
+    const videoGame = await getVideoGameById(req.params.id);
+
     res.send(videoGame);
   } catch (error) {
     next(error);

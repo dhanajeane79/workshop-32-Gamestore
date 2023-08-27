@@ -4,6 +4,11 @@ const util = require("util");
 const REPLACE_ME = "SELECT * FROM videoGames ORDER BY id ASC";
 
 // GET - /api/video-games - get all video games
+// Define the function to retrieve all video games
+// Execute the SQL query to fetch all video games from the database
+// Extract the "rows" property from the result object
+// Return the retrieved video games
+// If an error occurs, throw a new error with a specific message
 async function getAllVideoGames() {
   try {
     const { rows: videoGames } = await client.query(`
@@ -16,26 +21,21 @@ async function getAllVideoGames() {
 }
 
 // GET - /api/video-games/:id - get a single video game by id
-// Define the function to retrieve all video games
-// Execute the SQL query to fetch all video games from the database
-// Extract the "rows" property from the result object
-// Return the retrieved video games
-// If an error occurs, throw a new error with a specific message
+// Define the function to retrieve a video game by ID
+// Execute the SQL query to fetch a video game by its ID from the database
+// Extract the first element of the "rows" array (video game) from the query result
+// Return the retrieved video game
+// If an error occurs, throw the error to be handled by the caller
 async function getVideoGameById(id) {
-  try {
-    const {
-      rows: [videoGame],
-    } = await client.query(
-      `
+    try {
+        const { rows: [videoGame] } = await client.query(`
             SELECT * FROM videoGames
             WHERE id = $1;
-        `,
-      [id]
-    );
-    return videoGame;
-  } catch (error) {
-    throw error;
-  }
+        `, [id]);
+        return videoGame;
+    } catch (error) {
+        throw error;
+    }
 }
 
 // POST - /api/video-games - create a new video game
